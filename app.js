@@ -37,6 +37,18 @@ app.post('/signin', (req, res) => {
         res.status(400).json('error loggin in');
     }
 });
+app.post('/register', (req, res) => {
+    const {name, email, password} = req.body;
+    database.users.push({
+        id: '224',
+        name: name,
+        email: email,
+        password: password,
+        entries: 0,
+        joined: new Date()
+    });
+    res.json(database.users[database.users.length-1]);
+});
 app.listen(3001, (err) =>{
     console.log('server listening');
 });
