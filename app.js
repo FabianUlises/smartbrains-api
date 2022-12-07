@@ -4,16 +4,18 @@ const app = express();
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt-nodejs');
 const cors = require('cors');
-const knex = require('knex')({
+const db = require('knex')({
     client: 'pg',
     connection: {
       host : '127.0.0.1',
-      port : 3306,
-      user : 'fab',
-      password : '',
+      user : 'postgres',
+      password : 'password123',
       database : 'smartbrain'
     }
-  });
+});
+db.select('*').from('users').then((data) => {
+    console.log(data);
+});
   
 // Middleware
 app.use(cors({
@@ -71,13 +73,11 @@ app.post('/register', (req, res) => {
     bcrypt.hash(password, null, null, function(err, hash) {
         console.log(hash);
     });
-    database.users.push({
-        id: '224',
-        name: name,
+    db('users').insert({
         email: email,
-        entries: 0,
+        name: name,
         joined: new Date()
-    });
+    }).then(console.log)
     res.json(database.users[database.users.length-1]);
 });
 app.put('/image', (req, res) => {
